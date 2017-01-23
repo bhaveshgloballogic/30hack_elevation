@@ -59,6 +59,12 @@ public class GooglePlacesReadTask extends AsyncTask<Object, Integer, String> {
             case 4:
                 breakDes = "Fifth Break";
                 break;
+            case 5:
+                breakDes = "Sixth Break";
+                break;
+            case 6:
+                breakDes = "Seventh Break";
+                break;
         }
     }
 }

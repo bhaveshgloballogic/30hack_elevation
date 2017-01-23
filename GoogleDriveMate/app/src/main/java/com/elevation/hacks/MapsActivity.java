@@ -419,14 +419,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onResultsSucceeded(List<HashMap<String, String>> list) {
 
         mRestlist.clear();
-        for (int i = 0; i < list.size(); i++) {
+        HashMap<String, String> googleBreakDesc = list.get(0);
+        for (int i = 1; i < list.size(); i++) {
             RestPO restPO = new RestPO();
             HashMap<String, String> googlePlace = list.get(i);
             restPO.setLat(googlePlace.get("lat"));
             restPO.setLng(googlePlace.get("lng"));
             restPO.setPlace_name(googlePlace.get("place_name"));
             restPO.setVicinity(googlePlace.get("vicinity"));
-            restPO.setBreakDesc(googlePlace.get("BreakDesc"));
             mRestlist.add(restPO);
         }
         btn_show_panel.setVisibility(View.VISIBLE);
