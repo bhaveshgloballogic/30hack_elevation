@@ -35,6 +35,7 @@ import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -162,7 +163,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
-        categories.add("restaurant");
+        categories.add("Restaurant");
         categories.add("ATMs");
         categories.add("Gas Stations");
         categories.add("Hospitals");
@@ -186,7 +187,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MapsActivity.this, "onItemClick", Toast.LENGTH_SHORT).show();
+                RestPO restPO = (RestPO) parent.getAdapter().getItem(position);
+                LatLng latLng = new LatLng(Double.parseDouble(restPO.getLat()), Double.parseDouble(restPO.getLng()));
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
+                mMap.animateCamera(cameraUpdate);
+                mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+              //  Toast.makeText(MapsActivity.this, "onItemClick", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -345,6 +351,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void sendRequest() {
         String origin1 = origin;
         String destination = mdestination;
+        destination = "Mumbai";
+        origin = "New Delhi";
         if (TextUtils.isEmpty(origin1)) {
             Toast.makeText(this, "Please enter origin address!", Toast.LENGTH_SHORT).show();
             return;
