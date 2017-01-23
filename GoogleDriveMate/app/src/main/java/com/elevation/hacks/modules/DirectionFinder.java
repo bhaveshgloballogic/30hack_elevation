@@ -19,9 +19,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by saurabh.malik1 on 1/23/2017.
- */
+
 
 public class DirectionFinder {
     private static final String DIRECTION_URL_API = "https://maps.googleapis.com/maps/api/directions/json?";
@@ -111,6 +109,7 @@ public class DirectionFinder {
             route.endLocation = new LatLng(jsonEndLocation.getDouble("lat"), jsonEndLocation.getDouble("lng"));
             route.overviewPoints = decodePolyLine(overview_polylineJson.getString("points"));
             //Set detailed journey points
+            route.points = new ArrayList<LatLng>();
             addJourneyPoints(route, jsonLeg);
 
             routes.add(route);
