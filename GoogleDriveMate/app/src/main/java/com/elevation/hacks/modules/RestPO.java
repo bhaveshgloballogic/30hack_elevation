@@ -7,7 +7,7 @@ public class RestPO {
     public String lat;
     public String lng;
     public String vicinity;
-    public double rating;
+    public float rating;
     public String breakDesc;
 
     public String getGoogleBreakDesc() {
@@ -52,9 +52,9 @@ public class RestPO {
         this.vicinity = vicinity;
     }
 
-    public void setRating(double rating){this.rating = rating;}
+    public void setRating(float rating){this.rating = rating;}
 
-    public double getRating(){return this.rating;}
+    public float getRating(){return this.rating;}
 
     public String getBreakDesc() {
         return breakDesc;
