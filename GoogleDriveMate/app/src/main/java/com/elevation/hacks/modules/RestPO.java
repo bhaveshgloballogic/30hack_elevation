@@ -2,12 +2,23 @@ package com.elevation.hacks.modules;
 
 
 public class RestPO {
+
     public String place_name;
     public String lat;
     public String lng;
     public String vicinity;
     public double rating;
     public String breakDesc;
+
+    public String getGoogleBreakDesc() {
+        return googleBreakDesc;
+    }
+
+    public void setGoogleBreakDesc(String googleBreakDesc) {
+        this.googleBreakDesc = googleBreakDesc;
+    }
+
+    public String googleBreakDesc;
 
     public String getPlace_name() {
         return place_name;
