@@ -42,6 +42,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -75,7 +76,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ProgressDialog progressDialog;
     private int PROXIMITY_RADIUS = 500;
     private SlidingUpPanelLayout mLayout;
-
+    LatLng mLatLng ;
+    private static final double EARTHRADIUS = 6366198;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -234,6 +236,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    public LatLngBounds createBoundsWithMinDiagonal(MarkerOptions firstMarker, MarkerOptions secondMarker) {
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(firstMarker.getPosition());
+        builder.include(secondMarker.getPosition());
+
+        LatLngBounds tmpBounds = builder.build();
+        /** Add 2 points 1000m northEast and southWest of the center.
+         * They increase the bounds only, if they are not already larger
+         * than this.
+         * 1000m on the diagonal translates into about 709m to each direction. */
+        LatLng center = tmpBounds.getCenter();
+        LatLng northEast = move(center, 709, 709);
+        LatLng southWest = move(center, -709, -709);
+        builder.include(southWest);
+        builder.include(northEast);
+        return builder.build();
+    }
+
+    private static LatLng move(LatLng startLL, double toNorth, double toEast) {
+        double lonDiff = meterToLongitude(toEast, startLL.latitude);
+        double latDiff = meterToLatitude(toNorth);
+        return new LatLng(startLL.latitude + latDiff, startLL.longitude
+                + lonDiff);
+    }
+
+    private static double meterToLongitude(double meterToEast, double latitude) {
+        double latArc = Math.toRadians(latitude);
+        double radius = Math.cos(latArc) * EARTHRADIUS;
+        double rad = meterToEast / radius;
+        return Math.toDegrees(rad);
+    }
+
+
+    private static double meterToLatitude(double meterToNorth) {
+        double rad = meterToNorth / EARTHRADIUS;
+        return Math.toDegrees(rad);
+    }
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -294,7 +334,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     }
-
+    private void updateCamera() {
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 16));
+    }
     @Override
     public void onDirectionFinderSuccess(List<Route> routes) {
         progressDialog.dismiss();
@@ -353,6 +395,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String destination = mdestination;
         destination = "Mumbai";
         origin = "New Delhi";
+        origin1 = "New Delhi";
         if (TextUtils.isEmpty(origin1)) {
             Toast.makeText(this, "Please enter origin address!", Toast.LENGTH_SHORT).show();
             return;
