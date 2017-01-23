@@ -25,4 +25,6 @@ public class Route {
 
     //ToDo Need to put better object instead of just List
     public List<LatLng> breakPoints;
+
+    public List<LatLng> legPoints;
 }
