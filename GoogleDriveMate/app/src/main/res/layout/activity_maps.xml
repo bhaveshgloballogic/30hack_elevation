@@ -20,17 +20,32 @@
          android:background="@android:color/holo_blue_bright"
         android:orientation="vertical">
 
+
+        <Button
+            android:text="Show"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:id="@+id/id_show_button" />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/id_button_details_layout">
+
+
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-              android:gravity="center"
+             android:layout_height="wrap_content"
+             android:id="@+id/id_autocomplete_layout"
 
-               android:orientation="horizontal"
+               android:orientation="vertical"
             >
             <fragment
                 android:id="@+id/place_autocomplete_fragment"
                 android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 />
@@ -38,22 +53,24 @@
             <fragment
                 android:id="@+id/place_autocomplete_fragment_dest"
                 android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 />
         </LinearLayout>
 
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:weightSum="1"
+            android:id="@+id/id_findpath_layout"
             android:orientation="horizontal"
             >
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/search_for"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="10dip"
                 android:textStyle="bold"
@@ -63,18 +80,24 @@
                 android:id="@+id/spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/search_for"
                 android:prompt="@string/spinner_title"/>
             <Button
                 android:id="@+id/btnFindPath"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:layout_alignRight="@+id/spinner"
+                android:layout_alignParentRight="true"
                 android:text="Find path" />
-        </LinearLayout>
+        </RelativeLayout>
+</LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:weightSum="1"
+            android:visibility="gone"
+            android:id="@+id/id_distance_layout"
             android:orientation="horizontal"
             >
 

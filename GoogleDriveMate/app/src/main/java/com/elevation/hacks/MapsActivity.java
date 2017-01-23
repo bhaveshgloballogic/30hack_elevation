@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -72,6 +73,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     String mdestination;
     LatLng start;
     LatLng end;
+    LinearLayout showBtnPanel;
+Button btn_show_panel;
+    LinearLayout  id_distance_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +87,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         btnFindPath = (Button) findViewById(R.id.btnFindPath);
+        btn_show_panel = (Button) findViewById(R.id.id_show_button);
+        showBtnPanel = (LinearLayout)findViewById(R.id.id_button_details_layout) ;
+        id_distance_layout = (LinearLayout)findViewById(R.id.id_distance_layout) ;
         //   etOrigin = (EditText) findViewById(R.id.etOrigin);
 
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
@@ -92,6 +99,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment_dest);
         autocompleteFragment_dst.setHint("Destination");
         autocompleteFragment.setHint("Origin");
+
         AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
                 .setTypeFilter(AutocompleteFilter.TYPE_FILTER_CITIES)
                 .build();
@@ -134,13 +142,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
         //  etDestination = (EditText) findViewById(R.id.etDestination);
 
+        btn_show_panel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showBtnPanel.setVisibility(View.VISIBLE);
+                id_distance_layout.setVisibility(View.GONE);
+                btn_show_panel.setVisibility(View.GONE);
+            }
+        });
+
         btnFindPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendRequest();
             }
         });
-
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
 
         // Spinner click listener
@@ -321,8 +337,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             restPO.setVicinity(googlePlace.get("vicinity"));
             mRestlist.add(restPO);
         }
-
-
+        btn_show_panel.setVisibility(View.VISIBLE);
+        id_distance_layout.setVisibility(View.VISIBLE);
+        showBtnPanel.setVisibility(View.GONE);
         arrayAdapter.notifyDataSetChanged();
     }
 
