@@ -19,4 +19,7 @@ public class Route {
     public List<LatLng> points;
 
     public List<LatLng> overviewPoints;
+
+    //ToDo Need to put better object instead of just List
+    public List<LatLng> breakPoints;
 }

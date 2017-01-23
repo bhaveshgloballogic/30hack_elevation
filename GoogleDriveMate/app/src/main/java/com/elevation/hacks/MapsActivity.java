@@ -63,7 +63,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private List<Polyline> polylinePaths = new ArrayList<>();
     private ProgressDialog progressDialog;
     RestAdapter arrayAdapter;
-    private int PROXIMITY_RADIUS = 500;
+    private int PROXIMITY_RADIUS = 2000;
     private static final String TAG = "MapsActivity";
     ArrayList<RestPO> mRestlist;
     private SlidingUpPanelLayout mLayout;
@@ -304,7 +304,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             for (int i = 0; i < route.points.size(); i++)
                 polylineOptions.add(route.points.get(i));
 
-            placesSuggestion(route.endLocation.latitude, route.endLocation.longitude);
+            placesSuggestion(route);
             polylinePaths.add(mMap.addPolyline(polylineOptions));
         }
     }
@@ -346,24 +346,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private void placesSuggestion(double latitude, double longitude) {
+    private void placesSuggestion(Route route) {
         String type = searchItem;
-        StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-        googlePlacesUrl.append("location=" + latitude + "," + longitude);
-        googlePlacesUrl.append("&radius=" + PROXIMITY_RADIUS);
-        googlePlacesUrl.append("&types=" + type);
-        googlePlacesUrl.append("&sensor=true");
-        googlePlacesUrl.append("&key=" + getResources().getString(R.string.google_maps_key));
+        for(LatLng latlng: route.breakPoints){
+            StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+            googlePlacesUrl.append("location=" + latlng.latitude + "," + latlng.longitude);
+            googlePlacesUrl.append("&radius=" + PROXIMITY_RADIUS);
+            googlePlacesUrl.append("&types=" + type);
+            googlePlacesUrl.append("&sensor=true");
+            googlePlacesUrl.append("&key=" + getResources().getString(R.string.google_maps_key));
 
-        GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
-        Object[] toPass = new Object[2];
-        toPass[0] = mMap;
-        toPass[1] = googlePlacesUrl.toString();
-        googlePlacesReadTask.setOnResultsListener(this);
-        googlePlacesReadTask.execute(toPass);
+            GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
+            Object[] toPass = new Object[2];
+            toPass[0] = mMap;
+            toPass[1] = googlePlacesUrl.toString();
+            googlePlacesReadTask.setOnResultsListener(this);
+            googlePlacesReadTask.execute(toPass);
+        }
     }
-
     //endregion
-
-
 }

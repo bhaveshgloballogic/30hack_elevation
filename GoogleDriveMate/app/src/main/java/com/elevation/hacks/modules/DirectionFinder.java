@@ -119,12 +119,44 @@ public class DirectionFinder {
     }
 
     private void addJourneyPoints(Route route, JSONObject jsonLeg) throws JSONException {
+        int totalDistance;
+        int totalDuration;
+        int distanceCounter = 0;
+        int legDistance = 0;
+        totalDistance = jsonLeg.getJSONObject("distance").getInt("value");
+        totalDuration = jsonLeg.getJSONObject("duration").getInt("value");
+        List<JSONObject> breakLegs = new ArrayList<>();
+        route.breakPoints = new ArrayList<>();
+
+        List<Distance> distanceBreaks = getBreakDistance(totalDistance);
+
         JSONArray jsonSteps = jsonLeg.getJSONArray("steps");
 
         for (int i = 0; i < jsonSteps.length(); i++) {
-            //Get Points decoded from leg's polyline
+            boolean isBreakLeg = false;
             JSONObject step = jsonSteps.getJSONObject(i);
-            route.points.addAll(decodePolyLine(step.getJSONObject("polyline").getString("points")));
+            legDistance = step.getJSONObject("distance").getInt("value");
+            double legBrPointRatio = 0.0;
+            //Add Legs on which break required.
+            for(Distance db: distanceBreaks){
+                if(distanceCounter < db.value && db.value <= (distanceCounter + legDistance)){
+                    step.put("startMilestone", distanceCounter);
+                    step.put("endMilestone", distanceCounter + legDistance);
+                    breakLegs.add(step);
+                    isBreakLeg = true;
+                    legBrPointRatio = (db.value - distanceCounter)/legDistance;
+                    break;
+                }
+            }
+            distanceCounter = distanceCounter + legDistance;
+            //Get Points decoded from leg's polyline
+            List<LatLng> points = decodePolyLine(step.getJSONObject("polyline").getString("points"));
+            if(isBreakLeg){
+                //ToDo Call some logic to get aprox coordinates for break point
+                //Right now Getting based on leg's break point Ratio
+                route.breakPoints.add(points.get((int)(points.size() * legBrPointRatio)));
+            }
+            route.points.addAll(points);
         }
     }
 
@@ -163,6 +195,40 @@ public class DirectionFinder {
         }
 
         return decoded;
+    }
+
+    private List<Distance> getBreakDistance(int totalDistance){
+        List<Distance> distanceBreakPoints = new ArrayList<>();
+
+        //Convert from Mtrs to KMs
+        totalDistance = totalDistance;
+
+        if(totalDistance <= 400*1000){
+            distanceBreakPoints.add(new Distance("Mid Break", totalDistance/2));
+        }
+        else if(totalDistance <= 900*1000){
+            //First Break
+            distanceBreakPoints.add(new Distance("First Break", totalDistance/3));
+            //Second Break
+            distanceBreakPoints.add(new Distance("Second Break", 2*totalDistance/3));
+        }
+        else{
+            int breakDistance = 0;
+            while (totalDistance > 300*1000){
+                breakDistance = breakDistance + 300*1000;
+
+                distanceBreakPoints.add(new Distance("Rest Break", breakDistance));
+
+                totalDistance = totalDistance - 300*1000;
+            }
+        }
+        return distanceBreakPoints;
+    }
+
+    private List<Duration> getBreakDuration(double totalDuration){
+        List<Duration> durationBreakPoints = new ArrayList<>();
+
+        return durationBreakPoints;
     }
 
     private List<LatLng> getStops(JSONArray jsonLegs) throws JSONException {
