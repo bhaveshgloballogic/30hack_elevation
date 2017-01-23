@@ -6,6 +6,7 @@ public class RestPO {
     public String lat;
     public String lng;
     public String vicinity;
+
     public String getPlace_name() {
         return place_name;
     }

@@ -1,7 +1,6 @@
 package com.elevation.hacks.modules;
 
 
-
 import android.util.Log;
 
 import java.io.BufferedReader;

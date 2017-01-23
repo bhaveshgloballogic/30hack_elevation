@@ -1,5 +1,4 @@
-<elevation.slidingpanel.SlidingUpPanelLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<elevation.slidingpanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:sothree="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/sliding_layout"
@@ -17,71 +16,96 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-         android:background="@android:color/holo_blue_bright"
+        android:background="@android:color/holo_blue_bright"
         android:orientation="vertical">
 
-        <LinearLayout
+
+        <Button
+            android:id="@+id/id_show_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-               android:orientation="horizontal"
-            >
-            <fragment
-                android:id="@+id/place_autocomplete_fragment"
-                android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-                android:layout_width="wrap_content"
+            android:text="Show"
+            android:visibility="gone" />
 
+        <LinearLayout
+            android:id="@+id/id_button_details_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:id="@+id/id_autocomplete_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
 
-            <fragment
-                android:id="@+id/place_autocomplete_fragment_dest"
-                android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-                android:layout_width="wrap_content"
+                android:orientation="vertical">
 
+                <fragment
+                    android:id="@+id/place_autocomplete_fragment"
+                    android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <fragment
+                    android:id="@+id/place_autocomplete_fragment_dest"
+                    android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/id_findpath_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/search_for"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Search For:"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp"
+                    android:layout_toRightOf="@+id/search_for"
+                    android:prompt="@string/spinner_title" />
+
+                <Button
+                    android:id="@+id/btnFindPath"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignRight="@+id/spinner"
+                    android:text="Find path" />
+            </RelativeLayout>
         </LinearLayout>
 
-
         <LinearLayout
+            android:id="@+id/id_distance_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="1"
             android:orientation="horizontal"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="10dip"
-                android:textStyle="bold"
-                android:text="Search For:"/>
-
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:prompt="@string/spinner_title"/>
-            <Button
-                android:id="@+id/btnFindPath"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="Find path" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="1"
-            android:orientation="horizontal"
-            >
+            android:visibility="gone"
+            android:weightSum="1">
 
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="5dp"
-                android:src="@drawable/ic_distance"/>
+                android:src="@drawable/ic_distance" />
+
             <TextView
                 android:id="@+id/tvDistance"
                 android:layout_width="wrap_content"
@@ -95,7 +119,8 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="5dp"
                 android:padding="5dp"
-                android:src="@drawable/ic_clock"/>
+                android:src="@drawable/ic_clock" />
+
             <TextView
                 android:id="@+id/tvDuration"
                 android:layout_width="wrap_content"
@@ -106,7 +131,6 @@
 
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:map="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -115,7 +139,6 @@
             tools:context="com.elevation.hacks.MapsActivity" />
 
     </LinearLayout>
-
 
 
     <!-- SLIDING LAYOUT -->
@@ -130,7 +153,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:orientation="horizontal">
 
             <TextView
@@ -141,18 +164,18 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
                 android:text="@string/hello"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <Button
                 android:id="@+id/follow"
-                android:text="@string/follow"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textStyle="bold"
                 android:gravity="center_vertical|right"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:textSize="14sp"/>
+                android:text="@string/follow"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -160,8 +183,7 @@
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
-        </ListView>
+            android:layout_weight="1"></ListView>
 
     </LinearLayout>
 

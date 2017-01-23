@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -42,8 +44,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polygon;
-import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -54,8 +54,16 @@ import java.util.List;
 
 import elevation.slidingpanel.SlidingUpPanelLayout;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback , AdapterView.OnItemSelectedListener, DirectionFinderListener, ResultsListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, AdapterView.OnItemSelectedListener, DirectionFinderListener, ResultsListener {
 
+    String searchItem;
+    String origin;
+    String mdestination;
+    LatLng start;
+    LatLng end;
+    LinearLayout showBtnPanel;
+    Button btn_show_panel;
+    LinearLayout id_distance_layout;
     private GoogleMap mMap;
     private Button btnFindPath;
     private List<Marker> originMarkers = new ArrayList<>();
@@ -66,12 +74,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private int PROXIMITY_RADIUS = 2000;
     private static final String TAG = "MapsActivity";
     ArrayList<RestPO> mRestlist;
+
     private SlidingUpPanelLayout mLayout;
-    String searchItem;
-    String origin;
-    String mdestination;
-    LatLng start;
-    LatLng end;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +87,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         btnFindPath = (Button) findViewById(R.id.btnFindPath);
+        btn_show_panel = (Button) findViewById(R.id.id_show_button);
+        showBtnPanel = (LinearLayout) findViewById(R.id.id_button_details_layout);
+        id_distance_layout = (LinearLayout) findViewById(R.id.id_distance_layout);
         //   etOrigin = (EditText) findViewById(R.id.etOrigin);
 
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
@@ -92,6 +99,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment_dest);
         autocompleteFragment_dst.setHint("Destination");
         autocompleteFragment.setHint("Origin");
+
         AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
                 .setTypeFilter(AutocompleteFilter.TYPE_FILTER_CITIES)
                 .build();
@@ -104,7 +112,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 // TODO: Get info about the selected place.
 
                 origin = place.getName().toString();
-                start =  place.getLatLng();
+                start = place.getLatLng();
                 Log.i(TAG, "Place: " + place.getName());
             }
 
@@ -122,7 +130,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 // TODO: Get info about the selected place.
 
                 mdestination = place.getName().toString();
-                end =  place.getLatLng();
+                end = place.getLatLng();
                 Log.i(TAG, "Place: " + place.getName());
             }
 
@@ -134,13 +142,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
         //  etDestination = (EditText) findViewById(R.id.etDestination);
 
+        btn_show_panel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showBtnPanel.setVisibility(View.VISIBLE);
+                id_distance_layout.setVisibility(View.GONE);
+                btn_show_panel.setVisibility(View.GONE);
+            }
+        });
+
         btnFindPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendRequest();
             }
         });
-
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
 
         // Spinner click listener
@@ -148,7 +164,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
-        categories.add("restaurant");
+        categories.add("Restaurant");
         categories.add("ATMs");
         categories.add("Gas Stations");
         categories.add("Hospitals");
@@ -172,7 +188,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MapsActivity.this, "onItemClick", Toast.LENGTH_SHORT).show();
+                RestPO restPO = (RestPO) parent.getAdapter().getItem(position);
+                LatLng latLng = new LatLng(Double.parseDouble(restPO.getLat()), Double.parseDouble(restPO.getLng()));
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
+                mMap.animateCamera(cameraUpdate);
+                mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+              //  Toast.makeText(MapsActivity.this, "onItemClick", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -269,7 +290,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         if (polylinePaths != null) {
-            for (Polyline polyline:polylinePaths ) {
+            for (Polyline polyline : polylinePaths) {
                 polyline.remove();
             }
         }
@@ -321,8 +342,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             restPO.setVicinity(googlePlace.get("vicinity"));
             mRestlist.add(restPO);
         }
-
-
+        btn_show_panel.setVisibility(View.VISIBLE);
+        id_distance_layout.setVisibility(View.VISIBLE);
+        showBtnPanel.setVisibility(View.GONE);
         arrayAdapter.notifyDataSetChanged();
     }
 

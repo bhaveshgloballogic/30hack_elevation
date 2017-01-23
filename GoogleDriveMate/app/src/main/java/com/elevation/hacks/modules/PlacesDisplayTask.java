@@ -1,11 +1,8 @@
 package com.elevation.hacks.modules;
 
 
-
-
 import android.os.AsyncTask;
 import android.util.Log;
-
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -26,6 +23,7 @@ public class PlacesDisplayTask extends AsyncTask<Object, Integer, List<HashMap<S
     public void setOnResultsListener(ResultsListener listener) {
         this.listener = listener;
     }
+
     @Override
     protected List<HashMap<String, String>> doInBackground(Object... inputObj) {
 
@@ -44,7 +42,7 @@ public class PlacesDisplayTask extends AsyncTask<Object, Integer, List<HashMap<S
 
     @Override
     protected void onPostExecute(List<HashMap<String, String>> list) {
-        //googleMap.clear();
+
         for (int i = 0; i < list.size(); i++) {
             MarkerOptions markerOptions = new MarkerOptions();
             HashMap<String, String> googlePlace = list.get(i);
