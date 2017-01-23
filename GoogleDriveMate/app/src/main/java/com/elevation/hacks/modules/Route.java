@@ -1,5 +1,7 @@
 package com.elevation.hacks.modules;
 
+import android.graphics.Color;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
@@ -15,6 +17,7 @@ public class Route {
     public LatLng endLocation;
     public String startAddress;
     public LatLng startLocation;
+    public int routeColorCode;
 
     public List<LatLng> points;
 
