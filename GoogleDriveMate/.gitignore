@@ -43,7 +43,7 @@ captures/
 .gradle
 /local.properties
 /.idea
-.idea/modules.xml
+.idea/com.elevation.hacks.modules.xml
 /.idea/workspace.xml
 /.idea/libraries
 .DS_Store
@@ -167,7 +167,7 @@ fabric.properties
 # Comment Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
 
 # *.iml
-# modules.xml
+# com.elevation.hacks.modules.xml
 # .idea/misc.xml
 # *.ipr
 

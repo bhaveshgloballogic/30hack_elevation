@@ -1,4 +1,4 @@
-package modules;
+package com.elevation.hacks.modules;
 
 import com.google.android.gms.maps.model.LatLng;
 
