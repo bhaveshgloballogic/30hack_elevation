@@ -6,6 +6,8 @@ public class RestPO {
     public String lat;
     public String lng;
     public String vicinity;
+    public double rating;
+    public String breakDesc;
 
     public String getPlace_name() {
         return place_name;
@@ -39,5 +41,15 @@ public class RestPO {
         this.vicinity = vicinity;
     }
 
+    public void setRating(double rating){this.rating = rating;}
 
+    public double getRating(){return this.rating;}
+
+    public String getBreakDesc() {
+        return breakDesc;
+    }
+
+    public void setBreakDesc(String breakDesc) {
+        this.breakDesc = breakDesc;
+    }
 }

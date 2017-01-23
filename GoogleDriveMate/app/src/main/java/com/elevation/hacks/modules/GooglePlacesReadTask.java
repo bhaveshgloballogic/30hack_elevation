@@ -10,6 +10,7 @@ public class GooglePlacesReadTask extends AsyncTask<Object, Integer, String> {
     String googlePlacesData = null;
     GoogleMap googleMap;
     ResultsListener listener;
+    String breakDes;
 
     public void setOnResultsListener(ResultsListener listener) {
         this.listener = listener;
@@ -22,6 +23,7 @@ public class GooglePlacesReadTask extends AsyncTask<Object, Integer, String> {
             String googlePlacesUrl = (String) inputObj[1];
             Http http = new Http();
             googlePlacesData = http.read(googlePlacesUrl);
+            setBreakDesc((int) inputObj[2]);
         } catch (Exception e) {
             Log.d("Google Place Read Task", e.toString());
         }
@@ -31,11 +33,32 @@ public class GooglePlacesReadTask extends AsyncTask<Object, Integer, String> {
     @Override
     protected void onPostExecute(String result) {
         PlacesDisplayTask placesDisplayTask = new PlacesDisplayTask();
-        Object[] toPass = new Object[2];
+        Object[] toPass = new Object[3];
         toPass[0] = googleMap;
         toPass[1] = result;
+        toPass[2] = breakDes;
         placesDisplayTask.setOnResultsListener(listener);
         placesDisplayTask.execute(toPass);
 
+    }
+
+    private void setBreakDesc(int breakSeq){
+        switch (breakSeq) {
+            case 0:
+                breakDes = "Break";
+                break;
+            case 1:
+                breakDes = "Second Break";
+                break;
+            case 2:
+                breakDes = "Third Break";
+                break;
+            case 3:
+                breakDes = "Fourth Break";
+                break;
+            case 4:
+                breakDes = "Fifth Break";
+                break;
+        }
     }
 }

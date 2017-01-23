@@ -17,7 +17,6 @@ public class PlacesDisplayTask extends AsyncTask<Object, Integer, List<HashMap<S
 
     JSONObject googlePlacesJson;
     GoogleMap googleMap;
-
     ResultsListener listener;
 
     public void setOnResultsListener(ResultsListener listener) {
@@ -34,6 +33,9 @@ public class PlacesDisplayTask extends AsyncTask<Object, Integer, List<HashMap<S
             googleMap = (GoogleMap) inputObj[0];
             googlePlacesJson = new JSONObject((String) inputObj[1]);
             googlePlacesList = placeJsonParser.parse(googlePlacesJson);
+            HashMap<String, String> googleBreakDesc = new HashMap<String, String>();
+            googleBreakDesc.put("BreakDesc", (String) inputObj[2]);
+            googlePlacesList.add(googleBreakDesc);
         } catch (Exception e) {
             Log.d("Exception", e.toString());
         }
@@ -43,7 +45,7 @@ public class PlacesDisplayTask extends AsyncTask<Object, Integer, List<HashMap<S
     @Override
     protected void onPostExecute(List<HashMap<String, String>> list) {
 
-        for (int i = 0; i < list.size(); i++) {
+        for (int i = 0; i < list.size() -1 ; i++) {
             MarkerOptions markerOptions = new MarkerOptions();
             HashMap<String, String> googlePlace = list.get(i);
             double lat = Double.parseDouble(googlePlace.get("lat"));

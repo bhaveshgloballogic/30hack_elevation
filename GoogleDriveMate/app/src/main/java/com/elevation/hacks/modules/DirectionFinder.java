@@ -167,21 +167,22 @@ public class DirectionFinder {
         totalDistance = totalDistance;
 
         if(totalDistance <= 400*1000){
-            distanceBreakPoints.add(new Distance("Mid Break", totalDistance/2));
+            distanceBreakPoints.add(new Distance("0", totalDistance/2));
         }
         else if(totalDistance <= 900*1000){
             //First Break
-            distanceBreakPoints.add(new Distance("First Break", totalDistance/3));
+            distanceBreakPoints.add(new Distance("1", totalDistance/3));
             //Second Break
-            distanceBreakPoints.add(new Distance("Second Break", 2*totalDistance/3));
+            distanceBreakPoints.add(new Distance("2", 2*totalDistance/3));
         }
         else{
             int breakDistance = 0;
+            int brkType = 1;
             while (totalDistance > 300*1000){
                 breakDistance = breakDistance + 300*1000;
 
-                distanceBreakPoints.add(new Distance("Rest Break", breakDistance));
-
+                distanceBreakPoints.add(new Distance(Integer.toString(brkType) , breakDistance));
+                brkType = brkType +1;
                 totalDistance = totalDistance - 300*1000;
             }
         }
