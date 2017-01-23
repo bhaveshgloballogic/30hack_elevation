@@ -181,7 +181,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
-        categories.add("Restaurant");
+        categories.add("restaurant");
         categories.add("ATMs");
         categories.add("Gas Stations");
         categories.add("Hospitals");
@@ -464,6 +464,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void placesSuggestion(Route route) {
         String type = searchItem;
         int breakSeq = 0;
+        Object[] toPass = new Object[4];
+        boolean isPOI = false;
+
+
+        //Get route break points
         for(LatLng latlng: route.breakPoints){
             StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
             googlePlacesUrl.append("location=" + latlng.latitude + "," + latlng.longitude);
@@ -474,14 +479,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             googlePlacesUrl.append("&key=" + getResources().getString(R.string.google_maps_key));
 
             GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
-            Object[] toPass = new Object[3];
             toPass[0] = mMap;
             toPass[1] = googlePlacesUrl.toString();
             toPass[2] = breakSeq;
+            toPass[3] = isPOI;
             googlePlacesReadTask.setOnResultsListener(this);
             googlePlacesReadTask.execute(toPass);
             breakSeq = breakSeq + 1;
         }
+
+        //Get Route POIs
+        /*
+        for(LatLng latlng: route.legPoints){
+            StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+            googlePlacesUrl.append("location=" + latlng.latitude + "," + latlng.longitude);
+            //googlePlacesUrl.append("&radius=" + PROXIMITY_RADIUS);
+            googlePlacesUrl.append("&rankby=distance");
+            googlePlacesUrl.append("&types=museum|amusement_park|zoo");
+            googlePlacesUrl.append("&sensor=true");
+            googlePlacesUrl.append("&key=" + getResources().getString(R.string.google_maps_key));
+
+            GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
+            toPass[0] = mMap;
+            toPass[1] = googlePlacesUrl.toString();
+            toPass[2] = breakSeq;
+            toPass[3] = isPOI;
+            googlePlacesReadTask.setOnResultsListener(this);
+            googlePlacesReadTask.execute(toPass);
+            breakSeq = breakSeq + 1;
+        }*/
     }
 
     protected synchronized void buildGoogleApiClient() {

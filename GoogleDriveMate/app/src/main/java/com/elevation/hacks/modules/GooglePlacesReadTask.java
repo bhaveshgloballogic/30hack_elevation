@@ -11,6 +11,7 @@ public class GooglePlacesReadTask extends AsyncTask<Object, Integer, String> {
     GoogleMap googleMap;
     ResultsListener listener;
     String breakDes;
+    Boolean isPOI;
 
     public void setOnResultsListener(ResultsListener listener) {
         this.listener = listener;
@@ -24,6 +25,7 @@ public class GooglePlacesReadTask extends AsyncTask<Object, Integer, String> {
             Http http = new Http();
             googlePlacesData = http.read(googlePlacesUrl);
             setBreakDesc((int) inputObj[2]);
+            isPOI = (boolean)inputObj[3];
         } catch (Exception e) {
             Log.d("Google Place Read Task", e.toString());
         }
@@ -33,13 +35,13 @@ public class GooglePlacesReadTask extends AsyncTask<Object, Integer, String> {
     @Override
     protected void onPostExecute(String result) {
         PlacesDisplayTask placesDisplayTask = new PlacesDisplayTask();
-        Object[] toPass = new Object[3];
+        Object[] toPass = new Object[4];
         toPass[0] = googleMap;
         toPass[1] = result;
         toPass[2] = breakDes;
+        toPass[3] = isPOI;
         placesDisplayTask.setOnResultsListener(listener);
         placesDisplayTask.execute(toPass);
-
     }
 
     private void setBreakDesc(int breakSeq){

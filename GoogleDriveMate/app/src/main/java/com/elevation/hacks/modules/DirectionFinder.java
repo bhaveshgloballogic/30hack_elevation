@@ -104,10 +104,13 @@ public class DirectionFinder {
         totalDuration = jsonLeg.getJSONObject("duration").getInt("value");
         List<JSONObject> breakLegs = new ArrayList<>();
         route.breakPoints = new ArrayList<>();
+        route.legPoints = new ArrayList<>();
 
         List<Distance> distanceBreaks = getBreakDistance(totalDistance);
 
         JSONArray jsonSteps = jsonLeg.getJSONArray("steps");
+
+        int legDisplacement = 0;
 
         for (int i = 0; i < jsonSteps.length(); i++) {
             boolean isBreakLeg = false;
@@ -125,6 +128,16 @@ public class DirectionFinder {
                     break;
                 }
             }
+            //region Start for LegPoints
+            legDisplacement = legDisplacement + legDistance;
+            if(legDisplacement > 10000){
+                route.legPoints.add(new LatLng(step.getJSONObject("end_location").getDouble("lat"),step.getJSONObject("end_location").getDouble("lng")));
+                //reset legDisplacement
+                legDisplacement = 0;
+            }
+
+            //endregion
+
             distanceCounter = distanceCounter + legDistance;
             //Get Points decoded from leg's polyline
             List<LatLng> points = decodePolyLine(step.getJSONObject("polyline").getString("points"));

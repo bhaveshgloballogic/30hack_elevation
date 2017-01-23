@@ -25,7 +25,7 @@ public class Places {
     }
 
     private List<HashMap<String, String>> getPlaces(JSONArray jsonArray) {
-        int placesCount = jsonArray.length();
+        int placesCount = jsonArray.length()>5?5:jsonArray.length();
         List<HashMap<String, String>> placesList = new ArrayList<HashMap<String, String>>();
         HashMap<String, String> placeMap = null;
 

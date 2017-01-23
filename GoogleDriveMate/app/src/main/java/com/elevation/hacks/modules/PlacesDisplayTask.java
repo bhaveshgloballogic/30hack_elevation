@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -18,6 +19,8 @@ public class PlacesDisplayTask extends AsyncTask<Object, Integer, List<HashMap<S
     JSONObject googlePlacesJson;
     GoogleMap googleMap;
     ResultsListener listener;
+    Boolean isPOI;
+
 
     public void setOnResultsListener(ResultsListener listener) {
         this.listener = listener;
@@ -34,7 +37,11 @@ public class PlacesDisplayTask extends AsyncTask<Object, Integer, List<HashMap<S
             googlePlacesJson = new JSONObject((String) inputObj[1]);
             googlePlacesList = placeJsonParser.parse(googlePlacesJson);
             HashMap<String, String> googleBreakDesc = new HashMap<String, String>();
-            googleBreakDesc.put("BreakDesc", (String) inputObj[2]);
+            //Dont add if for Route Info
+            isPOI = (boolean) inputObj[3];
+            if(!isPOI) {
+                googleBreakDesc.put("BreakDesc", (String) inputObj[2]);
+            }
             googlePlacesList.add(0,googleBreakDesc);
         } catch (Exception e) {
             Log.d("Exception", e.toString());
@@ -45,7 +52,7 @@ public class PlacesDisplayTask extends AsyncTask<Object, Integer, List<HashMap<S
     @Override
     protected void onPostExecute(List<HashMap<String, String>> list) {
 
-        for (int i = 1; i < list.size(); i++) {
+        for (int i = isPOI?0:1; i < list.size(); i++) {
             MarkerOptions markerOptions = new MarkerOptions();
             HashMap<String, String> googlePlace = list.get(i);
             double lat = Double.parseDouble(googlePlace.get("lat"));
@@ -55,6 +62,9 @@ public class PlacesDisplayTask extends AsyncTask<Object, Integer, List<HashMap<S
             LatLng latLng = new LatLng(lat, lng);
             markerOptions.position(latLng);
             markerOptions.title(placeName + " : " + vicinity);
+            if(isPOI) {
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+            }
             googleMap.addMarker(markerOptions);
         }
         listener.onResultsSucceeded(list);
