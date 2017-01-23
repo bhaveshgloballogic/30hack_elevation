@@ -25,7 +25,7 @@ import java.util.List;
 
 public class DirectionFinder {
     private static final String DIRECTION_URL_API = "https://maps.googleapis.com/maps/api/directions/json?";
-    private static final String GOOGLE_API_KEY = "AIzaSyAys2oYAvEPw9LHsvyhMAJsdayJrZ-WBp0";
+    private static final String GOOGLE_API_KEY = "AIzaSyAhoQEcIJCI_mpRInfAJmyN3RPp_QmXRd4";
     private DirectionFinderListener listener;
     private String origin;
     private String destination;
@@ -109,12 +109,24 @@ public class DirectionFinder {
             route.startAddress = jsonLeg.getString("start_address");
             route.startLocation = new LatLng(jsonStartLocation.getDouble("lat"), jsonStartLocation.getDouble("lng"));
             route.endLocation = new LatLng(jsonEndLocation.getDouble("lat"), jsonEndLocation.getDouble("lng"));
-            route.points = decodePolyLine(overview_polylineJson.getString("points"));
+            route.overviewPoints = decodePolyLine(overview_polylineJson.getString("points"));
+            //Set detailed journey points
+            addJourneyPoints(route, jsonLeg);
 
             routes.add(route);
         }
 
         listener.onDirectionFinderSuccess(routes);
+    }
+
+    private void addJourneyPoints(Route route, JSONObject jsonLeg) throws JSONException {
+        JSONArray jsonSteps = jsonLeg.getJSONArray("steps");
+
+        for (int i = 0; i < jsonSteps.length(); i++) {
+            //Get Points decoded from leg's polyline
+            JSONObject step = jsonSteps.getJSONObject(i);
+            route.points.addAll(decodePolyLine(step.getJSONObject("polyline").getString("points")));
+        }
     }
 
     private List<LatLng> decodePolyLine(final String poly) {
