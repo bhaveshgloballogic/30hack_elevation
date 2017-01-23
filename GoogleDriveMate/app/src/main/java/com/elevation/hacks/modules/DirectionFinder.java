@@ -1,5 +1,6 @@
 package com.elevation.hacks.modules;
 
+import android.graphics.Color;
 import android.os.AsyncTask;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -42,7 +43,7 @@ public class DirectionFinder {
         String urlOrigin = URLEncoder.encode(origin, "utf-8");
         String urlDestination = URLEncoder.encode(destination, "utf-8");
 
-        return DIRECTION_URL_API + "origin=" + urlOrigin + "&destination=" + urlDestination + "&key=" + GOOGLE_API_KEY;
+        return DIRECTION_URL_API + "origin=" + urlOrigin + "&destination=" + urlDestination + "&alternatives=true&key=" + GOOGLE_API_KEY;
     }
 
     private void parseJSon(String data) throws JSONException {
@@ -74,11 +75,24 @@ public class DirectionFinder {
             //Set detailed journey points
             route.points = new ArrayList<LatLng>();
             addJourneyPoints(route, jsonLeg);
-
+            route.routeColorCode = getRouteColor(i);
             routes.add(route);
         }
 
         listener.onDirectionFinderSuccess(routes);
+    }
+
+    private int getRouteColor(int routeNumber){
+        int color;
+        switch (routeNumber){
+            case 0:
+                color = Color.BLUE;
+                break;
+            default:
+                color = Color.GRAY;
+                break;
+        }
+        return color;
     }
 
     private void addJourneyPoints(Route route, JSONObject jsonLeg) throws JSONException {
