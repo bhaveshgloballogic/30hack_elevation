@@ -2,6 +2,7 @@ package com.elevation.hacks.modules;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,21 +27,37 @@ public class RestAdapter extends ArrayAdapter<RestPO> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.rest_user, parent, false);
         }
-        // Lookup view for data population
+
         TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
         TextView tvHome = (TextView) convertView.findViewById(R.id.tvHome);
+
+       if(!TextUtils.isEmpty(restPO.getGoogleBreakDesc())){
+
+           tvName.setText(restPO.getGoogleBreakDesc());
+           tvName.setTextSize(24);
+           tvHome.setVisibility(View.INVISIBLE);
+           convertView.setBackgroundColor(Color.parseColor("#ff00ddff"));
+
+       }else{
+           if(!TextUtils.isEmpty(restPO.getPlace_name()) && !TextUtils.isEmpty(restPO.getVicinity())) {
+               tvName.setText("  " + String.valueOf(position) + "." + " " + restPO.getPlace_name());
+               tvHome.setText("      " + restPO.getVicinity());
+               convertView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+           }
+       }
+        // Lookup view for data population
+
         // Populate the data into the template view using the data object
-        tvName.setText("  " + String.valueOf(position + 1) + "." + " " + restPO.getPlace_name());
-        tvHome.setText("      " + restPO.getVicinity());
-        if (position % 2 == 0) {
 
-            convertView.setBackgroundColor(Color.parseColor("#ff00ddff"));
-
-        } else {
-
-            convertView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-
-        }
+//        if (position % 2 == 0) {
+//
+//            convertView.setBackgroundColor(Color.parseColor("#ff00ddff"));
+//
+//        } else {
+//
+//
+//
+//        }
         // Return the completed view to render on screen
         return convertView;
     }

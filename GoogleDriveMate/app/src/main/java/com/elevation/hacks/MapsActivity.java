@@ -206,10 +206,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 RestPO restPO = (RestPO) parent.getAdapter().getItem(position);
-                LatLng latLng = new LatLng(Double.parseDouble(restPO.getLat()), Double.parseDouble(restPO.getLng()));
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
-                mMap.animateCamera(cameraUpdate);
-                mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+               if(!TextUtils.isEmpty(restPO.getLat()) && !TextUtils.isEmpty(restPO.getLng())) {
+                   LatLng latLng = new LatLng(Double.parseDouble(restPO.getLat()), Double.parseDouble(restPO.getLng()));
+                   CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
+                   mMap.animateCamera(cameraUpdate);
+                   mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+               }
               //  Toast.makeText(MapsActivity.this, "onItemClick", Toast.LENGTH_SHORT).show();
             }
         });
@@ -418,8 +420,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onResultsSucceeded(List<HashMap<String, String>> list) {
 
-        mRestlist.clear();
+      //  mRestlist.clear();
         HashMap<String, String> googleBreakDesc = list.get(0);
+        RestPO restPO1 = new RestPO();
+        restPO1.setGoogleBreakDesc(googleBreakDesc.get("BreakDesc"));
+        mRestlist.add(restPO1);
         for (int i = 1; i < list.size(); i++) {
             RestPO restPO = new RestPO();
             HashMap<String, String> googlePlace = list.get(i);
