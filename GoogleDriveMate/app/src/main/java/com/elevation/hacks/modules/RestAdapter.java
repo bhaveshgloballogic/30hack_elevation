@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.elevation.hacks.R;
@@ -22,6 +23,10 @@ public class RestAdapter extends ArrayAdapter<RestPO> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
+
+//        if(convertView!=null){
+//            return  convertView;
+//        }
         RestPO restPO = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
@@ -30,20 +35,27 @@ public class RestAdapter extends ArrayAdapter<RestPO> {
 
         TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
         TextView tvHome = (TextView) convertView.findViewById(R.id.tvHome);
-
+        RatingBar ratingBar = (RatingBar) convertView.findViewById(R.id.ratingBar);
        if(!TextUtils.isEmpty(restPO.getGoogleBreakDesc())){
 
            tvName.setText(restPO.getGoogleBreakDesc());
            tvName.setTextSize(24);
            tvHome.setVisibility(View.INVISIBLE);
+           ratingBar.setVisibility(View.INVISIBLE);
            convertView.setBackgroundColor(Color.parseColor("#ff00ddff"));
 
        }else{
            if(!TextUtils.isEmpty(restPO.getPlace_name()) && !TextUtils.isEmpty(restPO.getVicinity())) {
+               tvName.setTextSize(14);
+               tvHome.setVisibility(View.VISIBLE);
+               tvHome.setVisibility(View.VISIBLE);
                tvName.setText("  " + String.valueOf(position) + "." + " " + restPO.getPlace_name());
                tvHome.setText("      " + restPO.getVicinity());
                convertView.setBackgroundColor(Color.parseColor("#FFFFFF"));
            }
+
+           float r = restPO.getRating();
+           ratingBar.setRating(r);
        }
         // Lookup view for data population
 
