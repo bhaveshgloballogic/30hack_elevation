@@ -1,7 +1,6 @@
 package com.elevation.hacks.modules;
 
 
-
 public class Duration {
 
     public String text;

@@ -1,14 +1,10 @@
 package com.elevation.hacks.modules;
 
 
-
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
-
-import java.util.HashMap;
-import java.util.List;
 
 public class GooglePlacesReadTask extends AsyncTask<Object, Integer, String> {
     String googlePlacesData = null;
@@ -18,6 +14,7 @@ public class GooglePlacesReadTask extends AsyncTask<Object, Integer, String> {
     public void setOnResultsListener(ResultsListener listener) {
         this.listener = listener;
     }
+
     @Override
     protected String doInBackground(Object... inputObj) {
         try {

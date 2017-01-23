@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 public class DirectionFinder {
     private static final String DIRECTION_URL_API = "https://maps.googleapis.com/maps/api/directions/json?";
     private static final String GOOGLE_API_KEY = "AIzaSyAhoQEcIJCI_mpRInfAJmyN3RPp_QmXRd4";
@@ -44,42 +43,6 @@ public class DirectionFinder {
         String urlDestination = URLEncoder.encode(destination, "utf-8");
 
         return DIRECTION_URL_API + "origin=" + urlOrigin + "&destination=" + urlDestination + "&key=" + GOOGLE_API_KEY;
-    }
-
-    private class DownloadRawData extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            String link = params[0];
-            try {
-                URL url = new URL(link);
-                InputStream is = url.openConnection().getInputStream();
-                StringBuffer buffer = new StringBuffer();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    buffer.append(line + "\n");
-                }
-
-                return buffer.toString();
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String res) {
-            try {
-                parseJSon(res);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     private void parseJSon(String data) throws JSONException {
@@ -166,12 +129,48 @@ public class DirectionFinder {
     }
 
     private List<LatLng> getStops(JSONArray jsonLegs) throws JSONException {
-        List<LatLng> stops =  new ArrayList<LatLng>();
-        for(int i = 0; i < jsonLegs.length(); i++) {
+        List<LatLng> stops = new ArrayList<LatLng>();
+        for (int i = 0; i < jsonLegs.length(); i++) {
             JSONObject leg = jsonLegs.getJSONObject(i);
 
         }
 
         return stops;
+    }
+
+    private class DownloadRawData extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            String link = params[0];
+            try {
+                URL url = new URL(link);
+                InputStream is = url.openConnection().getInputStream();
+                StringBuffer buffer = new StringBuffer();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line + "\n");
+                }
+
+                return buffer.toString();
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String res) {
+            try {
+                parseJSon(res);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
