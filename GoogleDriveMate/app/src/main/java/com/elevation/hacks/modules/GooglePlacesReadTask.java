@@ -11,6 +11,7 @@ public class GooglePlacesReadTask extends AsyncTask<Object, Integer, String> {
     GoogleMap googleMap;
     ResultsListener listener;
     String breakDes;
+    String routeName;
 
     public void setOnResultsListener(ResultsListener listener) {
         this.listener = listener;
@@ -21,6 +22,7 @@ public class GooglePlacesReadTask extends AsyncTask<Object, Integer, String> {
         try {
             googleMap = (GoogleMap) inputObj[0];
             String googlePlacesUrl = (String) inputObj[1];
+            routeName = (String) inputObj[3];
             Http http = new Http();
             googlePlacesData = http.read(googlePlacesUrl);
             setBreakDesc((int) inputObj[2]);
@@ -44,7 +46,7 @@ public class GooglePlacesReadTask extends AsyncTask<Object, Integer, String> {
     private void setBreakDesc(int breakSeq){
         switch (breakSeq) {
             case 0:
-                breakDes = "Break";
+                breakDes = "Break - " + routeName;
                 break;
             case 1:
                 breakDes = "Second Break";

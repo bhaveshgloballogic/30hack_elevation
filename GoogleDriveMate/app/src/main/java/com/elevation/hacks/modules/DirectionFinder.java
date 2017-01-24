@@ -53,7 +53,7 @@ public class DirectionFinder {
         List<Route> routes = new ArrayList<Route>();
         JSONObject jsonData = new JSONObject(data);
         JSONArray jsonRoutes = jsonData.getJSONArray("routes");
-        for (int i = 0; i < jsonRoutes.length(); i++) {
+        for (int i = 0; i < jsonRoutes.length() && i < 3; i++) {
             JSONObject jsonRoute = jsonRoutes.getJSONObject(i);
             Route route = new Route();
 
@@ -76,10 +76,13 @@ public class DirectionFinder {
             route.points = new ArrayList<LatLng>();
             addJourneyPoints(route, jsonLeg);
             route.routeColorCode = getRouteColor(i);
+            route.RouteName = "Route No: " + (i+1);
+            route.RouteSequence = i+1;
             routes.add(route);
         }
 
         listener.onDirectionFinderSuccess(routes);
+        listener.onDirectionFinderSuccessPOI(routes);
     }
 
     private int getRouteColor(int routeNumber){
