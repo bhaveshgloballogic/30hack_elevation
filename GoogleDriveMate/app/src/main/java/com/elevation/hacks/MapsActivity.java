@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.elevation.hacks.modules.DirectionFinder;
 import com.elevation.hacks.modules.DirectionFinderListener;
+import com.elevation.hacks.modules.GooglePOIReadTask;
 import com.elevation.hacks.modules.GooglePlacesReadTask;
 import com.elevation.hacks.modules.RestAdapter;
 import com.elevation.hacks.modules.RestPO;
@@ -440,6 +441,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         arrayAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onPOIResultsSucceeded(List<HashMap<String, String>> list) {
+
+    }
+
     //region Private Methods
     private void sendRequest() {
         String origin1 = origin;
@@ -464,7 +470,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void placesSuggestion(Route route) {
         String type = searchItem;
         int breakSeq = 0;
-        Object[] toPass = new Object[4];
         boolean isPOI = false;
 
 
@@ -479,18 +484,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             googlePlacesUrl.append("&key=" + getResources().getString(R.string.google_maps_key));
 
             GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
+            Object[] toPass = new Object[3];
             toPass[0] = mMap;
             toPass[1] = googlePlacesUrl.toString();
             toPass[2] = breakSeq;
-            toPass[3] = isPOI;
             googlePlacesReadTask.setOnResultsListener(this);
             googlePlacesReadTask.execute(toPass);
             breakSeq = breakSeq + 1;
         }
 
-        //Get Route POIs
+        //Get Route
         /*
+
         for(LatLng latlng: route.legPoints){
+
             StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
             googlePlacesUrl.append("location=" + latlng.latitude + "," + latlng.longitude);
             //googlePlacesUrl.append("&radius=" + PROXIMITY_RADIUS);
@@ -499,13 +506,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             googlePlacesUrl.append("&sensor=true");
             googlePlacesUrl.append("&key=" + getResources().getString(R.string.google_maps_key));
 
-            GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
-            toPass[0] = mMap;
-            toPass[1] = googlePlacesUrl.toString();
-            toPass[2] = breakSeq;
-            toPass[3] = isPOI;
-            googlePlacesReadTask.setOnResultsListener(this);
-            googlePlacesReadTask.execute(toPass);
+            GooglePOIReadTask googlePOIReadTask = new GooglePOIReadTask();
+            Object[] toPass = new Object[1];
+            toPass[0] = googlePlacesUrl.toString();
+            googlePOIReadTask.setOnResultsListener(this);
+            googlePOIReadTask.execute(toPass);
             breakSeq = breakSeq + 1;
         }*/
     }

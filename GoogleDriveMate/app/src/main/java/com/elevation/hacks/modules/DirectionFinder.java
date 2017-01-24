@@ -128,6 +128,8 @@ public class DirectionFinder {
                     break;
                 }
             }
+
+            /*
             //region Start for LegPoints
             legDisplacement = legDisplacement + legDistance;
             if(legDisplacement > 10000){
@@ -135,10 +137,10 @@ public class DirectionFinder {
                 //reset legDisplacement
                 legDisplacement = 0;
             }
-
+*/
             //endregion
 
-            distanceCounter = distanceCounter + legDistance;
+            //distanceCounter = distanceCounter + legDistance;
             //Get Points decoded from leg's polyline
             List<LatLng> points = decodePolyLine(step.getJSONObject("polyline").getString("points"));
             if(isBreakLeg){
