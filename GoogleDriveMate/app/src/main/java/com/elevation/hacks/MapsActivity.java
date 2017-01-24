@@ -444,6 +444,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onPOIResultsSucceeded(List<HashMap<String, String>> list) {
 
+
     }
 
     //region Private Methods
@@ -494,7 +495,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         //Get Route
-        /*
+
 
         for(LatLng latlng: route.legPoints){
 
@@ -512,7 +513,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             googlePOIReadTask.setOnResultsListener(this);
             googlePOIReadTask.execute(toPass);
             breakSeq = breakSeq + 1;
-        }*/
+        }
     }
 
     protected synchronized void buildGoogleApiClient() {

@@ -23,7 +23,7 @@ import java.util.List;
 
 public class DirectionFinder {
     private static final String DIRECTION_URL_API = "https://maps.googleapis.com/maps/api/directions/json?";
-    private static final String GOOGLE_API_KEY = "AIzaSyAhoQEcIJCI_mpRInfAJmyN3RPp_QmXRd4";
+    private static final String GOOGLE_API_KEY = "AIzaSyCtr8nT0eDMw0NE5snr9U1wO_EyU1HH55E";
     private DirectionFinderListener listener;
     private String origin;
     private String destination;
@@ -129,7 +129,7 @@ public class DirectionFinder {
                 }
             }
 
-            /*
+
             //region Start for LegPoints
             legDisplacement = legDisplacement + legDistance;
             if(legDisplacement > 10000){
@@ -137,10 +137,10 @@ public class DirectionFinder {
                 //reset legDisplacement
                 legDisplacement = 0;
             }
-*/
+
             //endregion
 
-            //distanceCounter = distanceCounter + legDistance;
+            distanceCounter = distanceCounter + legDistance;
             //Get Points decoded from leg's polyline
             List<LatLng> points = decodePolyLine(step.getJSONObject("polyline").getString("points"));
             if(isBreakLeg){
