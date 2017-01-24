@@ -127,7 +127,7 @@ public class DirectionFinder {
                     step.put("endMilestone", distanceCounter + legDistance);
                     breakLegs.add(step);
                     isBreakLeg = true;
-                    legBrPointRatio = (db.value - distanceCounter)/legDistance;
+                    legBrPointRatio = (double)(db.value - distanceCounter)/(double)legDistance;
                     break;
                 }
             }
