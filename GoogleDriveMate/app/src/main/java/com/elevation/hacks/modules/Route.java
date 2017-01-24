@@ -18,6 +18,8 @@ public class Route {
     public String startAddress;
     public LatLng startLocation;
     public int routeColorCode;
+    public String RouteName;
+    public int RouteSequence;
 
     public List<LatLng> points;
 

@@ -22,7 +22,7 @@ public class POIDisplayTask extends AsyncTask<Object, Integer, List<HashMap<Stri
     JSONObject googlePlacesJson;
     GoogleMap googleMap;
     ResultsListener listener;
-    Boolean isPOI;
+    int routeSeq;
 
 
     public void setOnResultsListener(ResultsListener listener) {
@@ -37,6 +37,7 @@ public class POIDisplayTask extends AsyncTask<Object, Integer, List<HashMap<Stri
 
         try {
             googlePlacesJson = new JSONObject((String) inputObj[0]);
+            routeSeq = (Integer) inputObj[1];
             googlePlacesList = placeJsonParser.parse(googlePlacesJson);
             HashMap<String, String> googleBreakDesc = new HashMap<String, String>();
 
@@ -49,7 +50,7 @@ public class POIDisplayTask extends AsyncTask<Object, Integer, List<HashMap<Stri
     @Override
     protected void onPostExecute(List<HashMap<String, String>> list) {
 
-        listener.onPOIResultsSucceeded(list);
+        listener.onPOIResultsSucceeded(list, routeSeq);
     }
 }
 

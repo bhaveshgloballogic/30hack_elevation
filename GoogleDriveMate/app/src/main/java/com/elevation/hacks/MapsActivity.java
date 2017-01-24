@@ -172,7 +172,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnFindPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mRestlist.clear();
                 sendRequest();
+
             }
         });
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
@@ -382,7 +384,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onDirectionFinderSuccess(List<Route> routes) {
         mMap.clear();
-        progressDialog.dismiss();
         polylinePaths = new ArrayList<>();
         originMarkers = new ArrayList<>();
         destinationMarkers = new ArrayList<>();
@@ -419,9 +420,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onResultsSucceeded(List<HashMap<String, String>> list) {
+    public void onDirectionFinderSuccessPOI(List<Route> routes) {
 
-      //  mRestlist.clear();
+        for (Route route : routes) {
+            poiSuggestion(route);
+        }
+    }
+
+    @Override
+    public void onResultsSucceeded(List<HashMap<String, String>> list) {
+        progressDialog.dismiss();
+
         HashMap<String, String> googleBreakDesc = list.get(0);
         RestPO restPO1 = new RestPO();
         restPO1.setGoogleBreakDesc(googleBreakDesc.get("BreakDesc"));
@@ -442,7 +451,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onPOIResultsSucceeded(List<HashMap<String, String>> list) {
+    public void onPOIResultsSucceeded(List<HashMap<String, String>> list, int routeSeq) {
 
 
     }
@@ -485,17 +494,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             googlePlacesUrl.append("&key=" + getResources().getString(R.string.google_maps_key));
 
             GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
-            Object[] toPass = new Object[3];
+            Object[] toPass = new Object[4];
             toPass[0] = mMap;
             toPass[1] = googlePlacesUrl.toString();
             toPass[2] = breakSeq;
+            toPass[3] = route.RouteName;
             googlePlacesReadTask.setOnResultsListener(this);
             googlePlacesReadTask.execute(toPass);
             breakSeq = breakSeq + 1;
         }
 
-        //Get Route
+    }
 
+    private void poiSuggestion(Route route) {
+        String type = searchItem;
+        int breakSeq = 0;
+        boolean isPOI = false;
 
         for(LatLng latlng: route.legPoints){
 
@@ -508,8 +522,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             googlePlacesUrl.append("&key=" + getResources().getString(R.string.google_maps_key));
 
             GooglePOIReadTask googlePOIReadTask = new GooglePOIReadTask();
-            Object[] toPass = new Object[1];
+            Object[] toPass = new Object[2];
             toPass[0] = googlePlacesUrl.toString();
+            toPass[1] = route.RouteSequence;
             googlePOIReadTask.setOnResultsListener(this);
             googlePOIReadTask.execute(toPass);
             breakSeq = breakSeq + 1;
