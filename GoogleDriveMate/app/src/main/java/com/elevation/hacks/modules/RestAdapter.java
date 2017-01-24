@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.elevation.hacks.R;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 
 public class RestAdapter extends ArrayAdapter<RestPO> {
@@ -39,8 +40,18 @@ public class RestAdapter extends ArrayAdapter<RestPO> {
        if(!TextUtils.isEmpty(restPO.getGoogleBreakDesc())){
 
            tvName.setText(restPO.getGoogleBreakDesc());
+
+           if(restPO.getGoogleBreakDesc().contains("Route")){
+               Random rand = new Random();
+
+               int  n = rand.nextInt(20) + 1;
+               tvHome.setText(" " + n + " Points of Interest" );
+           }else{
+               tvHome.setVisibility(View.INVISIBLE);
+           }
            tvName.setTextSize(24);
-           tvHome.setVisibility(View.INVISIBLE);
+
+           tvHome.setTextSize(16);
            ratingBar.setVisibility(View.INVISIBLE);
            convertView.setBackgroundColor(Color.parseColor("#ff00ddff"));
 

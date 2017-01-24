@@ -360,7 +360,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onDirectionFinderStart() {
         progressDialog = ProgressDialog.show(this, "Please wait.",
-                "Finding direction..!", true);
+                "Finding path..!", true);
 
         if (originMarkers != null) {
             for (Marker marker : originMarkers) {
@@ -443,6 +443,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             restPO.setLng(googlePlace.get("lng"));
             restPO.setPlace_name(googlePlace.get("place_name"));
             restPO.setVicinity(googlePlace.get("vicinity"));
+            restPO.setTypes(googlePlace.get("types"));
             mRestlist.add(restPO);
         }
         btn_show_panel.setVisibility(View.VISIBLE);
