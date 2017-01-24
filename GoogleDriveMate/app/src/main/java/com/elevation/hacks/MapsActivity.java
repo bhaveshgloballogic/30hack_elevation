@@ -382,7 +382,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onDirectionFinderSuccess(List<Route> routes) {
         mMap.clear();
-        progressDialog.dismiss();
+
         polylinePaths = new ArrayList<>();
         originMarkers = new ArrayList<>();
         destinationMarkers = new ArrayList<>();
@@ -420,7 +420,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onResultsSucceeded(List<HashMap<String, String>> list) {
-
+        progressDialog.dismiss();
       //  mRestlist.clear();
         HashMap<String, String> googleBreakDesc = list.get(0);
         RestPO restPO1 = new RestPO();

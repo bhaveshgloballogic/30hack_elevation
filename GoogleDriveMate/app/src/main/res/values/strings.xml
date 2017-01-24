@@ -8,6 +8,6 @@
     <string name="action_anchor_enable">Enable Anchor Point</string>
     <string name="action_anchor_disable">Disable Anchor Point</string>
     <string name="hello">Your Interactive Drive Partner Brought to you by <b> Team Elevation </b> </string>
-    <string name="follow">Slide Up</string>
+    <string name="follow">Travel Plan</string>
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAhoQEcIJCI_mpRInfAJmyN3RPp_QmXRd4</string>
 </resources>
